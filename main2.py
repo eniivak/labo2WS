@@ -9,6 +9,8 @@ datuak=''
 erantzuna=''
 uria='https://egela.ehu.eus/'
 cookie=''
+erabiltzaile=''
+pasahitza=''
 
 def pdfDeskargatu(soup):
     global uria,metodoa,goiburua
@@ -38,24 +40,18 @@ def ikasgaiaLortu():
     i=1
     while(ws!=1):
         if("Web Sistemak" not in ikasgai[i]):
-            i=i+1 #hurrengoa
+            i=i+1 #hurrengoa begiratu
         else:
-            ws=1
+            ws=1 #while-etik atera
     print(ikasgai[i])
     #web sistemak ikasgaia lortu dut, beraz orain ikasgaiaren barrura eskaera bat egin
-    uria=ikasgai[i]["href"]
+    uria=ikasgai[i]["href"]  #ikasgaiaren uria lortu
     goiburua={'Host': 'egela.ehu.eus','Cookie': cookie}
     erantzuna= requests.request(metodoa, uria, headers=goiburua, allow_redirects=False)
     soup= BeautifulSoup(erantzuna.content,'html.parser')
     print(soup)
     erantzuna=erantzuna.content
     pdfDeskargatu(soup)
-
-
-
-
-
-
 
 
 
@@ -71,7 +67,7 @@ def sartu():
 def saioaHasi():
     global cookie,metodoa,uria
     metodoa='GET'
-    datuak={'username': '909785', 'password': 'Nueva2020'}
+    datuak={'username': erabiltzaile, 'password':pasahitza}
     edukia = urllib.parse.urlencode(datuak)
     goiburua = {'Host': 'egela.ehu.eus','Cookie': cookie}
     erantzuna = requests.request(metodoa, uria, headers=goiburua, data=edukia, allow_redirects=False)
@@ -79,9 +75,11 @@ def saioaHasi():
     sartu()
 
 def datuakSartu():
-    global uria,cookie
+    global uria,cookie,erabiltzaile,pasahitza
+    erabiltzaile = input('Enter your name:')
+    pasahitza = input('Enter your password:')
     metodoa='POST'
-    datuak={'username':'909785','password':'Nueva2020'}
+    datuak={'username':erabiltzaile,'password':pasahitza}
     edukia = urllib.parse.urlencode(datuak)
     goiburua={'Host':'egela.ehu.eus',
               'Content-Length': str(len(edukia)),
